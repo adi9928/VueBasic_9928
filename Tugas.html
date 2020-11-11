@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" contents="width=device-width initial-scale=1.0"/>
+        <title>UGD</title>
+        <script src="vue.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <!-- css -->
+        <link rel="stylesheet" href="style.css">    
+    </head>
+    
+    <body>
+        <div id="app" class="center">
+            <form>
+                <div class="form-group">
+                  <label for="formGroupKegiatan">Apa yang mau kamu kerjakan ?</label>
+                  <input v-model="kegiatan" type="text" class="form-control" id="formGroupKegiatan" placeholder="Example input">
+                </div>
+                <div class="form-group">
+                    <label for="formGroupPrioritas">Penting gak ?</label>
+                    <select v-model="prioritas" class="custom-select" @click="enableCheck">
+                        <option disabled value="" label="Select Option">Select option</option>
+                        <option>Penting</option>
+                        <option>Biasa</option>
+                        <option>Tidak Penting</option>
+                      </select>
+                </div>
+                <div class="form-group">
+                    <label for="formGroupCatatan">Catatan</label>
+                    <input v-model="catatan" type="text" class="form-control" id="formGroupCatatan" placeholder="Another input">
+                  </div>
+                <br>
+                <button type="button" class="btn btn-primary" @click="add">Tambah</button>
+                <button type="button" class="btn btn-warning" @click="reset">Reset</button>
+              </form>
+              <br>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Kegiatan</th>
+                    <th>Prioritas</th>
+                    <th>Catatan</th>
+                    <th>Hapus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(list, index) in todo_list" :key="list.id">
+                    <td>{{ list.kegiatan }}</td>
+                    <td>{{ list.prioritas }}</td>
+                    <td>{{ list.catatan }}</td>
+                    <td><button type="button" class="btn btn-danger" @click="deleteTodo(list.id)">X</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            <footer>
+                <p>{{ profil.nama }} | {{ profil.npm }} | {{ profil.kelas }}</p>
+            </footer>
+        </div>
+
+    </body>
+    <script>
+        new Vue({
+            el: "#app",
+            data:{
+                profil:{
+                nama: 'Adi Wijaya',
+                npm: 180709928,
+                kelas: 'Kelas PAW E',
+                },
+                kegiatan: '',
+                catatan: '',
+                prioritas: '',
+                todo_list: [],
+                isEnable: false,
+                array: 1,
+            },
+            
+            methods: {
+                add(){
+                    if(this.isEnable){
+                    this.todo_list.push(
+                      {id:this.array,
+                       kegiatan:this.kegiatan,
+                       catatan:this.catatan,
+                       prioritas:this.prioritas})
+                    this.array++;
+                    this.kegiatan = '';
+                    this.catatan = '';
+                    this.prioritas = '';
+                    }
+                },
+                deleteTodo(id){
+                  for (index = 0; index < this.todo_list.length; index++)
+                    if(this.todo_list[index].id == id){
+                      this.$delete(this.todo_list, index);
+                      break;
+                    }  
+                },
+                enableCheck(){
+                  if(this.prioritas !="")
+                    this.isEnable = true;
+                },
+                reset(){
+                  this.todo_list=[]
+                },
+            },
+            computed:{
+              
+            }
+        });
+    </script>
+</html>
